@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
+    <style>
+        /* Inline CSS for customizing header, box, and footer */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f3f4f6; /* Light background for the page */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            align-items: center; /* Center content horizontally */
+        }
+
+        header {
+            background-color: #4B6CB7;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 15px;
+            transition: background-color 0.3s;
+        }
+
+        header a:hover {
+            background-color: #6D8BDE;
+            border-radius: 5px;
+        }
+
+        footer {
+            background-color: #2d2d2d;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer a {
+            color: #4F8EF7;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: #fff;
+        }
+
+        .contact-container {
+            width: 100%;
+            max-width: 600px;
+            background-color: white;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 500px; /* Ensure the box is tall enough */
+        }
+
+        .contact-container form input,
+        .contact-container form textarea {
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .contact-container form button {
+            padding: 12px;
+            background-color: #4B6CB7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .contact-container form button:hover {
+            background-color: #3a5fa8;
+        }
+
+        .contact-container form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Add spacing between form elements */
+            flex-grow: 1; /* Ensure the form grows and pushes the button to the bottom */
+        }
+
+        .contact-container h1 {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4B6CB7;
+        }
+
+        .contact-container p {
+            text-align: center;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        /* Ensure footer remains at the bottom */
+        footer {
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Section -->
+    <header>
+        <a href="login.html">Home</a>
+    </header>
+
+    <!-- Contact Form Section -->
+    <div class="contact-container">
+        <h1 class="text-3xl font-extrabold text-center text-blue-600 mb-4">Contact Us</h1>
+        <p class="text-sm text-center text-gray-500 mb-6">We'd love to hear from you! Please fill out the form below.</p>
+
+        <!-- Contact Us Form -->
+        <form id="contactForm" method="POST" action="https://web3forms.com/api/v1/submit" class="space-y-4">
+            <input type="hidden" name="access_key" value="8c443595-d831-4925-a36d-2c4718dce134">
+
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
+                <input type="text" id="name" name="name" class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-400" required>
+            </div>
+
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Your Email</label>
+                <input type="email" id="email" name="email" class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-400" required>
+            </div>
+
+            <div>
+                <label for="message" class="block text-sm font-medium text-gray-700">Your Message</label>
+                <textarea id="message" name="message" rows="4" class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:ring-2 focus:ring-blue-400" required></textarea>
+            </div>
+
+            <div class="text-center">
+                <button type="submit">Send Message</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <div>
+            <a href="https://brijeshh.glitch.me" class="text-blue-400 hover:text-blue-300 font-bold transition-colors duration-300">This Website is made by Brijesh</a>
+            | 
+            <a href="pp.html" class="text-blue-400 hover:text-blue-300 font-bold transition-colors duration-300">Privacy Policy</a>
+        </div>
+        <div class="mt-2">&copy; 2024 Brijesh. All Rights Reserved.</div>
+    </footer>
+</body>
+
+</html>

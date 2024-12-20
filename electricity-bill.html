@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity Bill Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 dark:text-white">
+
+    <div class="container mx-auto p-6">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+            <h1 class="text-2xl font-bold text-center text-blue-600 mb-6 dark:text-blue-400">Electricity Bill Calculator</h1>
+            <form id="billForm" onsubmit="event.preventDefault(); calculateBill();">
+                <div class="mb-4">
+                    <label for="name" class="block text-gray-700 dark:text-gray-300">Name:</label>
+                    <input type="text" id="name" class="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                </div>
+                <div class="mb-4">
+                    <label for="address" class="block text-gray-700 dark:text-gray-300">Address:</label>
+                    <input type="text" id="address" class="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                </div>
+                <div class="mb-4">
+                    <label for="subdivision" class="block text-gray-700 dark:text-gray-300">Subdivision:</label>
+                    <input type="text" id="subdivision" class="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                </div>
+                <div class="mb-4">
+                    <label for="section" class="block text-gray-700 dark:text-gray-300">Section:</label>
+                    <input type="text" id="section" class="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                </div>
+                <div class="mb-4">
+                    <label for="previous_date" class="block text-gray-700 dark:text-gray-300">Previous Meter Reading Date:</label>
+                    <input type="date" id="previous_date" class="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                </div>
+                <div class="mb-4">
+                    <label for="current_date" class="block text-gray-700 dark:text-gray-300">Current Meter Reading Date:</label>
+                    <input type="date" id="current_date" class="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                </div>
+                <div class="mb-4">
+                    <label for="previous_reading" class="block text-gray-700 dark:text-gray-300">Previous Meter Reading (in kWh):</label>
+                    <input type="number" id="previous_reading" class="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                </div>
+                <div class="mb-4">
+                    <label for="current_reading" class="block text-gray-700 dark:text-gray-300">Current Meter Reading (in kWh):</label>
+                    <input type="number" id="current_reading" class="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                </div>
+                <div class="mb-4">
+                    <label for="additionalCharges" class="block text-gray-700 dark:text-gray-300">Are there additional charges? (Yes/No)</label>
+                    <select id="additionalCharges" class="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white" onchange="toggleReasonInput()" required>
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                    </select>
+                </div>
+                <div id="reasonContainer" class="hidden mb-4">
+                    <label for="chargesReason" class="block text-gray-700 dark:text-gray-300">Reason for Additional Charges:</label>
+                    <input type="text" id="chargesReason" class="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                </div>
+                <div id="additionalAmountContainer" class="hidden mb-4">
+                    <label for="additionalAmount" class="block text-gray-700 dark:text-gray-300">Amount for Additional Charges (in Rs):</label>
+                    <input type="number" id="additionalAmount" class="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                </div>
+                <button type="submit" class="w-full p-3 bg-blue-600 text-white rounded-md hover:bg-blue-700">Calculate Bill</button>
+            </form>
+
+            <!-- Bill Details Section -->
+            <!-- Updated Bill Details Section -->
+<div id="billDetails" class="hidden mt-6 p-6 bg-gray-100 rounded-lg shadow-md dark:bg-gray-800">
+    <h2 class="text-xl font-bold text-center text-blue-600 mb-4 dark:text-blue-400">Bill Summary</h2>
+    <p><strong>Name:</strong> <span id="outputName"></span></p>
+    <p><strong>Address:</strong> <span id="outputAddress"></span></p>
+    <p><strong>Subdivision:</strong> <span id="outputSubdivision"></span></p>
+    <p><strong>Section:</strong> <span id="outputSection"></span></p>
+    <p><strong>Previous Meter Reading Date:</strong> <span id="outputPrevDate"></span></p>
+    <p><strong>Current Meter Reading Date:</strong> <span id="outputCurrDate"></span></p>
+    <p><strong>Units Consumed:</strong> <span id="outputUnits"></span> kWh</p>
+    <p><strong>Electricity Bill:</strong> ₹<span id="outputBill"></span></p>
+    <p id="additionalChargesInfo" class="hidden">
+        <strong>Additional Charges:</strong> ₹<span id="additionalAmountInfo"></span> for <span id="chargesReasonInfo"></span>
+    </p>
+    <p class="mt-4 text-lg font-bold">
+        <strong>Total Amount:</strong> ₹<span id="outputTotalAmount"></span>
+    </p>
+    <button onclick="shareBill()" class="w-full p-3 bg-green-600 text-white rounded-md hover:bg-green-700 mt-4">Share Bill</button>
+</div>
+
+
+            <!-- Energy Saving Tips Section -->
+            <div class="mt-6 p-6 bg-gray-100 rounded-lg shadow-md dark:bg-gray-800">
+                <h2 class="text-xl font-bold text-center text-blue-600 mb-4 dark:text-blue-400">Energy Saving Tips</h2>
+                <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+                    <li>1. Turn off lights when not in use.</li>
+                    <li>2. Use energy-efficient appliances.</li>
+                    <li>3. Keep electrical appliances unplugged when not in use.</li>
+                    <li>4. Use natural light during the day.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to toggle dark mode
+        const darkModeToggle = document.getElementById("darkModeToggle");
+        darkModeToggle.addEventListener("click", () => {
+            document.body.classList.toggle("dark");
+        });
+
+        // Function to show or hide reason and additional charges input
+        function toggleReasonInput() {
+            const additionalCharges = document.getElementById("additionalCharges").value;
+            const reasonContainer = document.getElementById("reasonContainer");
+            const additionalAmountContainer = document.getElementById("additionalAmountContainer");
+            if (additionalCharges === "yes") {
+                reasonContainer.classList.remove("hidden");
+                additionalAmountContainer.classList.remove("hidden");
+            } else {
+                reasonContainer.classList.add("hidden");
+                additionalAmountContainer.classList.add("hidden");
+            }
+        }
+
+        // Function to calculate the total bill with tiered pricing
+        // Function to calculate the total bill with tiered pricing
+function calculateBill() {
+    const name = document.getElementById("name").value;
+    const address = document.getElementById("address").value;
+    const subdivision = document.getElementById("subdivision").value;
+    const section = document.getElementById("section").value;
+    const previousDate = document.getElementById("previous_date").value;
+    const currentDate = document.getElementById("current_date").value;
+    const previousReading = parseFloat(document.getElementById("previous_reading").value);
+    const currentReading = parseFloat(document.getElementById("current_reading").value);
+    const additionalCharges = document.getElementById("additionalCharges").value;
+    const additionalAmount = parseFloat(document.getElementById("additionalAmount").value) || 0;
+    const chargesReason = document.getElementById("chargesReason").value || '';
+
+    // Calculate the units consumed
+    const unitsConsumed = currentReading - previousReading;
+
+    // Calculate the bill using tiered pricing
+    let totalBill;
+    if (unitsConsumed <= 60) {
+        totalBill = unitsConsumed * 3.0;
+    } else {
+        totalBill = 180 + (unitsConsumed - 60) * 4.8;
+    }
+
+    // Calculate final total including additional charges
+    let finalBill = totalBill;
+    if (additionalCharges === "yes") {
+        finalBill += additionalAmount;
+    }
+
+    // Display the bill details
+    document.getElementById("outputName").innerText = name;
+    document.getElementById("outputAddress").innerText = address;
+    document.getElementById("outputSubdivision").innerText = subdivision;
+    document.getElementById("outputSection").innerText = section;
+    document.getElementById("outputPrevDate").innerText = previousDate;
+    document.getElementById("outputCurrDate").innerText = currentDate;
+    document.getElementById("outputUnits").innerText = unitsConsumed;
+    document.getElementById("outputBill").innerText = totalBill.toFixed(2);
+
+    if (additionalCharges === "yes") {
+        document.getElementById("additionalChargesInfo").classList.remove("hidden");
+        document.getElementById("additionalAmountInfo").innerText = additionalAmount.toFixed(2);
+        document.getElementById("chargesReasonInfo").innerText = chargesReason;
+    } else {
+        document.getElementById("additionalChargesInfo").classList.add("hidden");
+    }
+
+    // Display the final total amount
+    document.getElementById("outputTotalAmount").innerText = finalBill.toFixed(2);
+
+    document.getElementById("billDetails").classList.remove("hidden");
+}
+
+        // Function to share the bill (can be expanded as per requirements)
+        function shareBill() {
+            alert("Bill shared successfully!");
+        }
+    </script>
+
+</body>
+</html>

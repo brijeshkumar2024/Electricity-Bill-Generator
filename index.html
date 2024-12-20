@@ -1,0 +1,29 @@
+<script>
+    // Redirect to login if not logged in
+    if (!localStorage.getItem('isRegistered')) {
+        alert('Please register first.');
+        window.location.href = 'registration.html';
+    }
+
+    // Pre-fill user registration details if available
+    window.onload = () => {
+        const userDetails = JSON.parse(localStorage.getItem('userDetails')) || {};
+        if (userDetails.name) {
+            document.getElementById('name').value = userDetails.name;
+        }
+        if (userDetails.address) {
+            document.getElementById('address').value = userDetails.address;
+        }
+        if (userDetails.subdivision) {
+            document.getElementById('subdivision').value = userDetails.subdivision;
+        }
+    };
+
+    // Logout functionality
+    function logout() {
+        localStorage.removeItem('isRegistered');
+        localStorage.removeItem('userDetails');
+        alert('You have logged out.');
+        window.location.href = 'registration.html';
+    }
+</script>
